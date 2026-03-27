@@ -6,7 +6,7 @@ export const SITE_CONFIG = {
   tagline: "Your School Marketplace",
   primaryColor: "#003087",
   accentColor:  "#F5AF02",
-  contactEmail: "admin@hmsbay.com",
+  contactEmail: "braydenmerchant@d181students.org",
   minBidIncrement: 0.25,
   categories: [
     "Books & Stationery",
@@ -21,6 +21,7 @@ export const SITE_CONFIG = {
   ],
   conditions: ["New", "Like New", "Good", "Fair", "Poor"],
   auctionDurations: [
+    { label: "1 Minute",   seconds: 60 },
     { label: "1 Hour",   seconds: 3600 },
     { label: "6 Hours",  seconds: 21600 },
     { label: "12 Hours", seconds: 43200 },
