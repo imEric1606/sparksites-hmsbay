@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────────── -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">H</div>
+      <span class="nav-brand-name site-name">HMSBay</span>
+    </a>
+
+    <div class="nav-search">
+      <span class="nav-search-icon">🔍</span>
+      <input type="search" id="nav-search-input" placeholder="Search listings…" aria-label="Search listings">
+    </div>
+
+    <div class="nav-actions">
+      <a href="/create-listing.html" class="nav-sell-btn">+ Sell</a>
+      <div id="nav-auth" style="display:flex;gap:8px;align-items:center">
+        <!-- Populated by auth.js -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<div style="background:linear-gradient(135deg,var(--primary) 55%,var(--primary-dark) 100%);color:#fff;padding:40px 0 36px">
+  <div class="container">
+    <h1 style="color:#fff;font-size:2rem">Welcome to <span class="site-name" style="color:var(--accent)">HMSBay</span></h1>
+    <p class="site-tagline" style="opacity:0.85;margin-top:6px;font-size:1rem">Your School Marketplace</p>
+  </div>
+</div>
+
+<!-- ── Filters Bar ───────────────────────────────────────────── -->
+<div class="filters-bar">
+  <div class="filters-inner">
+    <div class="filter-group">
+      <label for="search-input">🔍</label>
+      <input type="search" id="search-input" placeholder="Search…"
+             style="padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:0.85rem;outline:none;width:180px">
+    </div>
+    <div class="filter-group">
+      <label for="filter-category">Category:</label>
+      <select id="filter-category">
+        <option value="all">All Categories</option>
+        <!-- Populated by JS -->
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-sort">Sort:</label>
+      <select id="filter-sort">
+        <option value="ending">Ending Soonest</option>
+        <option value="newest">Newest First</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+      </select>
+    </div>
+    <span class="results-count" id="results-count"></span>
+  </div>
+</div>
+
+<!-- ── Listings Grid ─────────────────────────────────────────── -->
+<main>
+  <div class="container" style="padding-top:24px;padding-bottom:60px">
+
+    <!-- User search results — only visible when a search query is active -->
+    <div id="user-results-section" style="display:none;margin-bottom:28px">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--text-secondary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">👤 People</div>
+      <div id="user-results-grid" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+    </div>
+
+    <div class="listings-grid" id="listings-grid">
+      <!-- Populated by listings.js -->
+    </div>
+  </div>
+</main>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <p>&copy; <span id="footer-year"></span> <span class="site-name">HMSBay</span> — School Marketplace.
+       Questions? <a href="mailto:admin@hmsbay.com" class="site-email">admin@hmsbay.com</a></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { initIndexPage } from '/js/listings.js';
+  import { SITE_CONFIG } from '/config.js';
+
+  // Update footer email from config
+  document.querySelector('.site-email')?.setAttribute('href', `mailto:${SITE_CONFIG.contactEmail}`);
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  initIndexPage();
+
+  // Easter egg: typing "psychosis" anywhere on the page opens the admin panel.
+  // Sets a sessionStorage flag that tells the dashboard to skip the isAdmin gate.
+  let _eggBuf = '';
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+    _eggBuf = (_eggBuf + e.key).slice(-9).toLowerCase();
+    if (_eggBuf === 'psychosis') {
+      sessionStorage.setItem('hmsbay_dev_access', '1');
+      window.location.href = '/admin/dashboard.html';
+    }
+  });
+</script>
+</body>
+</html>

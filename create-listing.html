@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell an Item</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">H</div>
+      <span class="nav-brand-name site-name">HMSBay</span>
+    </a>
+    <div class="nav-actions">
+      <div id="nav-auth" style="display:flex;gap:8px;align-items:center"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>List an Item for Auction</h1>
+    <p>Fill in the details below to start your auction.</p>
+  </div>
+</div>
+
+<main class="page-content">
+  <div class="container-sm">
+
+    <!-- Auth guard message (hidden once user is confirmed) -->
+    <div id="auth-guard" style="display:none;text-align:center;padding:60px 20px">
+      <div style="font-size:3rem;margin-bottom:16px">🔒</div>
+      <h2>Sign In Required</h2>
+      <p style="color:var(--text-secondary);margin:12px 0 24px">You need to be logged in to list an item.</p>
+      <button class="btn btn-primary" onclick="window.__authModal('login')">Log In</button>
+      <button class="btn btn-outline" onclick="window.__authModal('register')" style="margin-left:10px">Register</button>
+    </div>
+
+    <form id="create-listing-form" novalidate>
+
+      <!-- Item Details -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">📦 Item Details</div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:0">
+
+          <div class="form-group">
+            <label class="form-label" for="listing-title">Title <span class="req">*</span></label>
+            <input type="text" id="listing-title" class="form-control"
+                   placeholder="e.g. Year 10 Maths Textbook" maxlength="120" required>
+            <div class="form-hint">Keep it clear and descriptive (max 120 chars)</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="listing-description">Description <span class="req">*</span></label>
+            <textarea id="listing-description" class="form-control" rows="4"
+                      placeholder="Describe the item — edition, any wear, what's included…" maxlength="2000" required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="listing-category">Category <span class="req">*</span></label>
+              <select id="listing-category" class="form-control" required>
+                <option value="">Select category…</option>
+                <!-- Populated by JS -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="listing-condition">Condition <span class="req">*</span></label>
+              <select id="listing-condition" class="form-control" required>
+                <option value="">Select condition…</option>
+                <!-- Populated by JS -->
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">🖼 Item Photo</div>
+        <div class="card-body">
+          <div class="image-upload-area" id="image-upload-area">
+            <input type="file" id="listing-image" accept="image/*">
+            <div class="image-upload-icon">📸</div>
+            <p><strong>Click to upload</strong> or drag and drop</p>
+            <p>JPG, PNG, GIF — max 5 MB</p>
+          </div>
+          <div class="image-preview" id="image-preview">
+            <img src="" alt="Preview" style="width:100%;height:100%;object-fit:cover">
+            <button type="button" class="image-preview-remove" id="remove-image" title="Remove image">✕</button>
+          </div>
+          <div class="upload-progress" id="upload-progress">
+            <div class="upload-progress-bar" id="upload-progress-bar" style="width:0%"></div>
+          </div>
+          <div class="form-hint" style="margin-top:8px">A photo helps your item sell faster. You can skip this if you don't have one.</div>
+        </div>
+      </div>
+
+      <!-- Pricing & Duration -->
+      <div class="card" style="margin-bottom:32px">
+        <div class="card-header">💰 Pricing & Duration</div>
+        <div class="card-body">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="listing-price">Starting Price (USD) <span class="req">*</span></label>
+              <input type="number" id="listing-price" class="form-control"
+                     placeholder="0.25" min="0.01" step="0.01" required>
+              <div class="form-hint">Minimum $0.01</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="listing-duration">Auction Duration <span class="req">*</span></label>
+              <select id="listing-duration" class="form-control" required>
+                <!-- Populated by JS -->
+              </select>
+            </div>
+          </div>
+
+          <div style="background:var(--primary-light);border-radius:var(--radius);padding:14px 16px;font-size:0.85rem;color:var(--primary)">
+            ℹ The auction will end automatically after the selected duration. Bids must exceed the current price by at least $0.25.
+          </div>
+
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-accent btn-lg btn-block" id="submit-listing-btn">
+        🚀 Create Listing
+      </button>
+
+    </form>
+
+  </div>
+</main>
+
+<footer style="margin-top:60px">
+  <div class="container" style="text-align:center">
+    <p>&copy; <span id="footer-year"></span> <span class="site-name">HMSBay</span></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { initCreateListingPage } from '/js/listings.js';
+  import { onAuthChange } from '/js/auth.js';
+
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  initCreateListingPage();
+
+  // Show/hide form vs auth guard
+  onAuthChange(user => {
+    const form  = document.getElementById('create-listing-form');
+    const guard = document.getElementById('auth-guard');
+    if (user) {
+      form.style.display  = '';
+      guard.style.display = 'none';
+    } else {
+      form.style.display  = 'none';
+      guard.style.display = '';
+    }
+  });
+</script>
+</body>
+</html>

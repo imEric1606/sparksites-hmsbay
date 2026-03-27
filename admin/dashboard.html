@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">H</div>
+      <span class="nav-brand-name site-name">HMSBay</span>
+    </a>
+    <div class="nav-actions">
+      <span style="font-size:0.82rem;color:var(--text-secondary)">Logged in as <strong id="admin-user-name">…</strong></span>
+      <div id="nav-auth" style="display:flex;gap:8px;align-items:center"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="admin-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────────── -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-header">
+      <h2>🛠 Admin Panel</h2>
+    </div>
+
+    <button class="admin-nav-item active" data-section="section-overview">
+      📊 Overview
+    </button>
+    <button class="admin-nav-item" data-section="section-auctions">
+      🔨 Auctions
+    </button>
+    <button class="admin-nav-item" data-section="section-users">
+      👥 Users
+    </button>
+    <button class="admin-nav-item" data-section="section-killswitch">
+      ⚡ Kill Switch
+    </button>
+
+    <div style="margin-top:auto;padding:20px;border-top:1px solid rgba(255,255,255,0.1)">
+      <a href="/" style="color:rgba(255,255,255,0.6);font-size:0.85rem">← Back to Site</a>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ───────────────────────────────────────── -->
+  <div class="admin-content">
+
+    <!-- Overview Section -->
+    <section id="section-overview" class="admin-section active">
+      <h1>Dashboard Overview</h1>
+      <div class="admin-stats">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total-listings">—</div>
+          <div class="stat-lbl">Total Listings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-active-listings">—</div>
+          <div class="stat-lbl">Active Auctions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total-users">—</div>
+          <div class="stat-lbl">Registered Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total-bids">—</div>
+          <div class="stat-lbl">Total Bids Placed</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Quick Actions</div>
+        <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="process-expired-btn">⚙ Process Expired Auctions</button>
+          <a href="/" target="_blank" class="btn btn-outline">🌐 View Live Site</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Auctions Section -->
+    <section id="section-auctions" class="admin-section">
+      <h1>Auction Management</h1>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+        <div class="filter-group">
+          <label for="auction-filter-status">Filter by status:</label>
+          <select id="auction-filter-status">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="ended">Ended</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <span id="auction-count" style="font-size:0.85rem;color:var(--text-secondary)"></span>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Seller</th>
+              <th>Current Bid</th>
+              <th>End Time</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="auction-tbody">
+            <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-secondary)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Users Section -->
+    <section id="section-users" class="admin-section">
+      <h1>User Moderation</h1>
+      <div style="margin-bottom:20px">
+        <input type="search" id="user-search" class="form-control"
+               placeholder="Search by name or email…" style="max-width:320px">
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Joined</th>
+              <th>School</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-secondary)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Kill Switch Section -->
+    <section id="section-killswitch" class="admin-section">
+      <h1>Kill Switch</h1>
+      <p style="color:var(--text-secondary);margin-bottom:24px">
+        Enabling the kill switch immediately shows a maintenance page to all non-admin visitors.
+        The admin dashboard remains accessible.
+      </p>
+
+      <div class="kill-switch-card" id="kill-switch-card">
+        <div class="toggle-switch" style="margin-bottom:20px">
+          <div class="toggle-track" id="kill-switch-track">
+            <div class="toggle-thumb"></div>
+          </div>
+          <div>
+            <div class="toggle-label" id="kill-switch-label">Kill Switch Off — Site is live</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:2px">
+              Click the toggle to enable/disable maintenance mode
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="kill-switch-message">Maintenance Message</label>
+          <textarea id="kill-switch-message" class="form-control" rows="3"
+                    placeholder="We'll be back soon. Scheduled maintenance in progress."></textarea>
+          <div class="form-hint">Shown to visitors when the kill switch is active.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="save-maintenance-msg">Save Message</button>
+      </div>
+    </section>
+
+  </div><!-- /admin-content -->
+</div><!-- /admin-layout -->
+
+<script type="module">
+  import { initAdminDashboard } from '/js/admin.js';
+  initAdminDashboard();
+</script>
+</body>
+</html>

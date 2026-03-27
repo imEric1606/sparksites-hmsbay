@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="overflow:hidden">
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">H</div>
+      <span class="nav-brand-name site-name">HMSBay</span>
+    </a>
+    <div class="nav-actions">
+      <a href="/create-listing.html" class="nav-sell-btn">+ Sell</a>
+      <div id="nav-auth" style="display:flex;gap:8px;align-items:center"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- Not-logged-in state -->
+<div id="messages-auth-prompt" style="text-align:center;padding:80px 20px">
+  <div style="font-size:3.5rem;margin-bottom:16px">💬</div>
+  <h2>Sign In to View Messages</h2>
+  <p style="color:var(--text-secondary);margin:12px 0 24px">Log in to see your conversations with buyers and sellers.</p>
+  <button class="btn btn-primary" onclick="window.__authModal('login')">Log In</button>
+</div>
+
+<!-- Two-panel layout -->
+<div class="messages-layout" id="messages-layout" style="display:none">
+
+  <!-- Left: conversations list -->
+  <div class="conversations-sidebar">
+    <div class="conversations-header">
+      💬 Conversations
+    </div>
+    <div id="conversations-list">
+      <div style="padding:20px;color:var(--text-secondary);font-size:0.88rem">Loading…</div>
+    </div>
+  </div>
+
+  <!-- Right: chat area -->
+  <div class="chat-area" id="chat-area">
+    <div class="chat-empty" style="margin:auto">
+      <div style="font-size:3rem;margin-bottom:12px">👈</div>
+      <p>Select a conversation to start chatting</p>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+  import { initMessagesPage } from '/js/messages.js';
+  initMessagesPage();
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    function isAdmin() {
+      return isSignedIn() &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+    function isNotBanned() {
+      return isSignedIn() &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isBanned != true;
+    }
+
+    // ── Users ─────────────────────────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      // Users may only write their own document; admins can write any user doc
+      allow write: if isOwner(uid) || isAdmin();
+    }
+
+    // ── Listings ──────────────────────────────────────────────────────────────
+    match /listings/{listingId} {
+      allow read: if true;   // public read
+
+      // Create: authenticated, non-banned user
+      allow create: if isNotBanned();
+
+      // Update: seller can update only if no bids yet; admins can always update
+      allow update: if isAdmin() ||
+                       (isOwner(resource.data.sellerId) &&
+                        resource.data.bids.size() == 0);
+
+      // Delete: only admins
+      allow delete: if isAdmin();
+    }
+
+    // ── Messages ──────────────────────────────────────────────────────────────
+    match /messages/{conversationId} {
+      allow read, write: if isSignedIn() &&
+                            request.auth.uid in resource.data.participants;
+      allow create: if isSignedIn();
+    }
+
+    // ── Site Settings ─────────────────────────────────────────────────────────
+    match /siteSettings/{docId} {
+      allow read: if true;          // needed for kill-switch check on load
+      allow write: if isAdmin();
+    }
+  }
+}

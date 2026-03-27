@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listing</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ── Nav ───────────────────────────────────────────────────── -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">H</div>
+      <span class="nav-brand-name site-name">HMSBay</span>
+    </a>
+    <div class="nav-search">
+      <span class="nav-search-icon">🔍</span>
+      <input type="search" id="nav-search-input" placeholder="Search listings…"
+             onkeydown="if(event.key==='Enter')window.location.href='/?q='+encodeURIComponent(this.value)">
+    </div>
+    <div class="nav-actions">
+      <a href="/create-listing.html" class="nav-sell-btn">+ Sell</a>
+      <div id="nav-auth" style="display:flex;gap:8px;align-items:center"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Breadcrumb ────────────────────────────────────────────── -->
+<div style="background:var(--white);border-bottom:1px solid var(--border);padding:10px 0">
+  <div class="container" style="font-size:0.85rem;color:var(--text-secondary)">
+    <a href="/">Home</a> › <span id="breadcrumb-title">Listing</span>
+  </div>
+</div>
+
+<!-- ── Main Content ──────────────────────────────────────────── -->
+<main>
+  <div class="container listing-detail">
+    <div class="listing-detail-grid" id="listing-detail-grid">
+
+      <!-- Image Column -->
+      <div>
+        <div class="listing-image-main" id="listing-image-box">
+          <div class="no-image-lg">📦</div>
+        </div>
+      </div>
+
+      <!-- Info Column -->
+      <div class="listing-info">
+
+        <!-- Title & meta -->
+        <div>
+          <h1 id="listing-title" style="margin-bottom:10px">Loading…</h1>
+          <div class="listing-meta" id="listing-meta"></div>
+        </div>
+
+        <!-- Countdown -->
+        <div style="display:flex;align-items:center;gap:8px;font-size:1rem;font-weight:600">
+          <span>⏱</span>
+          <span class="countdown" id="detail-countdown">—</span>
+        </div>
+
+        <!-- Price box -->
+        <div class="listing-price-box" id="price-box">
+          <div class="price-label">Current Bid</div>
+          <div class="price-amount">—</div>
+        </div>
+
+        <!-- Bid area (login prompt / bid form / winner box) -->
+        <div id="bid-area">
+          <div class="spinner-sm"></div>
+        </div>
+
+        <!-- Bid history accordion -->
+        <div class="accordion" id="bid-history-accordion">
+          <div class="accordion-header" id="bid-history-toggle">
+            <span>Bid History</span>
+            <span class="accordion-arrow">▼</span>
+          </div>
+          <div class="accordion-body" id="bid-history-body">
+            <div style="padding:14px 16px;color:var(--text-secondary);font-size:0.88rem">Loading…</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="card">
+          <div class="card-header">Description</div>
+          <div class="card-body">
+            <p id="listing-description" style="line-height:1.7;color:var(--text-secondary)">—</p>
+          </div>
+        </div>
+
+        <!-- Seller -->
+        <div>
+          <h4 style="margin-bottom:8px">Seller</h4>
+          <div class="seller-card" id="seller-card">
+            <div class="spinner-sm"></div>
+          </div>
+        </div>
+
+      </div><!-- /info column -->
+    </div><!-- /grid -->
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; <span id="footer-year"></span> <span class="site-name">HMSBay</span></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { initListingPage } from '/js/listings.js';
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+  initListingPage();
+</script>
+</body>
+</html>

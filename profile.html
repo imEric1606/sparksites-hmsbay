@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">H</div>
+      <span class="nav-brand-name site-name">HMSBay</span>
+    </a>
+    <div class="nav-actions">
+      <a href="/create-listing.html" class="nav-sell-btn">+ Sell</a>
+      <div id="nav-auth" style="display:flex;gap:8px;align-items:center"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- Profile Header -->
+<div class="profile-header">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <div class="profile-avatar-lg" id="profile-avatar">?</div>
+      <div style="flex:1">
+        <h1 id="profile-name" style="color:var(--text)">Loading…</h1>
+        <div id="profile-school" style="color:var(--text-secondary);margin-top:2px"></div>
+        <div id="profile-joined" style="font-size:0.82rem;color:var(--text-secondary);margin-top:4px"></div>
+      </div>
+      <button class="btn btn-outline" id="edit-profile-btn" style="display:none">✏ Edit Profile</button>
+      <button class="btn btn-outline" id="message-user-btn" style="display:none">💬 Message</button>
+    </div>
+
+    <div class="profile-stats" style="margin-top:20px">
+      <div class="stat-item">
+        <div class="stat-value" id="stat-active">—</div>
+        <div class="stat-label">Active Listings</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-sold">—</div>
+        <div class="stat-label">Items Sold</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-won">—</div>
+        <div class="stat-label">Auctions Won</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<main class="page-content">
+  <div class="container">
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="active-listings-tab">Active Listings</button>
+      <button class="tab-btn"        data-tab="past-listings-tab">Past Listings</button>
+      <button class="tab-btn"        data-tab="won-listings-tab">Won Auctions</button>
+    </div>
+
+    <div id="active-listings-tab" class="tab-panel active">
+      <div style="padding:20px;color:var(--text-secondary)">Loading…</div>
+    </div>
+    <div id="past-listings-tab" class="tab-panel">
+      <div style="padding:20px;color:var(--text-secondary)">Loading…</div>
+    </div>
+    <div id="won-listings-tab" class="tab-panel">
+      <div style="padding:20px;color:var(--text-secondary)">Loading…</div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container" style="text-align:center">
+    <p>&copy; <span id="footer-year"></span> <span class="site-name">HMSBay</span></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { initProfilePage, initTabs } from '/js/listings.js';
+  import { openOrCreateDirectConversation } from '/js/messages.js';
+  import { getCurrentUser } from '/js/auth.js';
+
+  // Exposed so renderProfile (in listings.js) can call it via onclick
+  window.__messageUser = (uid, name) =>
+    openOrCreateDirectConversation(uid, name, getCurrentUser());
+
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+  initTabs();
+  initProfilePage();
+</script>
+</body>
+</html>
